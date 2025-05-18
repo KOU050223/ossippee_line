@@ -4,6 +4,28 @@ import { middleware as lineMiddleware, Client } from '@line/bot-sdk';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+// firebase 
+
+import admin from "firebase-admin";
+
+// 環境変数からサービスアカウントキーを取得
+const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+
+// Firebase Admin SDKを初期化
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+const db = admin.firestore();
+
+const docRef = db.collection('users').doc('alovelace');
+
+await docRef.set({
+  first: 'Ada',
+  last: 'Lovelace',
+  born: 1815
+});
+
 // ES Module で __dirname を使うための定義
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
