@@ -24,6 +24,41 @@ app.get('/', (_req, res) => {
   res.send('Hello, World!');
 });
 
+// firebaseを書き換えるエンドポイント
+// 投げ方
+/*
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userId": "U1234567890abcdef1234567890abcdef",
+    "gameState": "playing"
+  }' \
+  https://<your-cloud-function-url>/changeState
+*/
+/* 
+body: {
+    "userId": "xxxxxxx",
+    "gameState" : "xxxx"
+}
+*/
+app.post('/changeState', 
+  express.raw({ type: 'application/json' }), 
+  async (req, res) => {
+  const { userId, gameState } = req.body;
+  if (!userId || !gameState) {
+    res.status(400).send('Bad Request');
+  }
+
+  try {
+    const userRef = db.collection('users').doc(userId);
+    await userRef.set({ gameState }, { merge: true });
+    res.status(200).send('OK');
+  } catch (error) {
+    logger.error('Firestore 更新エラー:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 // Webhook エンドポイント用に raw ボディをパース & 署名検証ミドルウェア適用
 app.post(
   '/webhook',
@@ -52,14 +87,13 @@ async function handleEvent(event: any) {
         userId: profile.userId,
         displayName: profile.displayName,
         pictureUrl: profile.pictureUrl,
-        statusMessage: profile.statusMessage,
-        gameState: 'ready',
+        gameState: 'entry',
         nomiPoint: 0,
     });
 
     return lineClient.replyMessage(event.replyToken, {
       type: 'text',
-      text: `${profile.displayName} 酒飲み部のグループに参加ありがと〜！\nきみのidは ${profile.userId} だから今回使うアプリに登録しといて`, 
+      text: `${profile.displayName} 酒飲み部のグループに参加ありがと〜！\nきみのidは ${profile.userId} \nだから今回使うアプリに登録しといて`, 
     });
   }
 
