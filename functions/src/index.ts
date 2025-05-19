@@ -59,7 +59,7 @@ async function handleEvent(event: any) {
 
     return lineClient.replyMessage(event.replyToken, {
       type: 'text',
-      text: `${profile.displayName} 酒飲み部のグループに参加ありがと〜！\n\n` 
+      text: `${profile.displayName} 酒飲み部のグループに参加ありがと〜！\nきみのidは ${profile.userId} だから今回使うアプリに登録しといて`, 
     });
   }
 

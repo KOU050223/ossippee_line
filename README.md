@@ -26,5 +26,5 @@ ngrok http 5001
 https://developers.line.biz/console/channel/2007430916/messaging-api
 
 ```
-<https:ngrok-free.app>/ossippee-50d9a/asia-northeast1/lineBot/webhook
+https:ngrok-free.app>/ossippee-50d9a/asia-northeast1/lineBot/webhook
 ```
