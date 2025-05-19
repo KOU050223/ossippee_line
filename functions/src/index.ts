@@ -9,23 +9,27 @@ import { middleware as lineMiddleware, Client } from "@line/bot-sdk";
 admin.initializeApp();
 const db = admin.firestore();
 
-// Secret Manager から参照するキー名（CLI で登録済みの名前と合わせる）
+// Secret Manager に登録済みの名前と合わせる
 const LINE_CHANNEL_SECRET = defineSecret("LINE_CHANNEL_SECRET");
-const LINE_CHANNEL_TOKEN = defineSecret("LINE_CHANNEL_ACCESS_TOKEN");
+const LINE_CHANNEL_ACCESS_TOKEN = defineSecret("LINE_CHANNEL_ACCESS_TOKEN");
 
 export const lineBot = onRequest(
   {
     region: "asia-northeast1",
-    secrets: [LINE_CHANNEL_SECRET, LINE_CHANNEL_TOKEN],
+    secrets: [LINE_CHANNEL_SECRET, LINE_CHANNEL_ACCESS_TOKEN],
   },
   async (req, res) => {
-    // --- シークレットを取得 ---
-    const channelSecret = await LINE_CHANNEL_SECRET.value();
-    const channelAccessToken = await LINE_CHANNEL_TOKEN.value();
+    // シークレット取得
+    if (process.env.FUNCTIONS_EMULATOR) {
+      require('dotenv').config();  // Emulators 起動時だけ .env を読む
+    }
+    const channelSecret = process.env.LINE_CHANNEL_SECRET;
+    const channelAccessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+    console.log("channelSecret", channelSecret);
+    console.log("channelAccessToken", channelAccessToken);
 
     // LINE SDK Client を生成
-    const lineConfig = { channelSecret, channelAccessToken };
-    const lineClient = new Client(lineConfig);
+    const lineClient = new Client({ channelSecret, channelAccessToken: channelAccessToken ?? "" });
 
     // Express アプリを都度組み立て
     const app = express();
@@ -62,10 +66,7 @@ export const lineBot = onRequest(
     app.post(
       "/webhook",
       express.raw({ type: "application/json" }),
-      lineMiddleware({
-        channelSecret: process.env.LINE_CHANNEL_SECRET!,
-        channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN!,
-      }),
+      lineMiddleware({ channelSecret:channelSecret??"", channelAccessToken }),
       async (req, res) => {
         try {
           const events = (req.body as any).events || [];
@@ -80,7 +81,7 @@ export const lineBot = onRequest(
       }
     );
 
-    // 最後に Express に流し込む
+    // Express 実行
     app(req, res);
   }
 );
