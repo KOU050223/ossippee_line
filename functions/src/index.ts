@@ -10,8 +10,6 @@ admin.initializeApp();
 const db = admin.firestore();
 
 // LINE チャンネル設定は Firebase Functions の config から取得します
-// 実行前に以下コマンドで設定してください: 
-// firebase functions:config:set line.channel_secret="YOUR_SECRET" line.channel_access_token="YOUR_TOKEN"
 const lineConfig = {
   channelSecret: v1functions.config().line.channel_secret,
   channelAccessToken: v1functions.config().line.channel_access_token,
@@ -51,15 +49,17 @@ async function handleEvent(event: any) {
 
     // Firestore にユーザー登録
     await registerUserToDatabase({
-      userId: profile.userId,
-      displayName: profile.displayName,
-      pictureUrl: profile.pictureUrl,
-      statusMessage: profile.statusMessage,
+        userId: profile.userId,
+        displayName: profile.displayName,
+        pictureUrl: profile.pictureUrl,
+        statusMessage: profile.statusMessage,
+        gameState: 'ready',
+        nomiPoint: 0,
     });
 
     return lineClient.replyMessage(event.replyToken, {
       type: 'text',
-      text: `${profile.displayName} さん、はじめまして！登録が完了しました😊`,
+      text: `${profile.displayName} 酒飲み部のグループに参加ありがと〜！\n\n` 
     });
   }
 
@@ -112,6 +112,8 @@ async function registerUserToDatabase(user: {
   displayName: string;
   pictureUrl?: string;
   statusMessage?: string;
+  gameState?: string;
+  nomiPoint?: number;
 }) {
   logger.info('新規ユーザー登録:', user);
   const userRef = db.collection('users').doc(user.userId);
