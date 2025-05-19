@@ -66,7 +66,13 @@ export const lineBot = onRequest(
     app.post(
       "/webhook",
       express.raw({ type: "application/json" }),
-      lineMiddleware({ channelSecret:channelSecret??"", channelAccessToken }),
+      (req, res, next) => {
+        logger.info("▶ /webhook hit");
+        logger.info("   X-Line-Signature:", req.header("X-Line-Signature"));
+        logger.info("   Content-Length:", req.get("content-length"));
+        next();
+      },
+      lineMiddleware({ channelSecret: channelSecret ?? "" }),
       async (req, res) => {
         try {
           const events = (req.body as any).events || [];

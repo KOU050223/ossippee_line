@@ -42,3 +42,8 @@ gcloud services enable secretmanager.googleapis.com
 firebase functions:secrets:set LINE_CHANNEL_SECRET
 firebase functions:secrets:set LINE_CHANNEL_ACCESS_TOKEN
 ```
+
+値を確認する
+GCP/ secretManager/値を確認
+
+https://console.cloud.google.com/security/secret-manager/secret/LINE_CHANNEL_SECRET/versions?hl=ja&inv=1&invt=Abx1hg&project=ossippee-50d9a&supportedpurview=folder
