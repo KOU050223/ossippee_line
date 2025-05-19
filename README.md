@@ -28,3 +28,10 @@ https://developers.line.biz/console/channel/2007430916/messaging-api
 ```
 https:ngrok-free.app>/ossippee-50d9a/asia-northeast1/lineBot/webhook
 ```
+
+
+```
+firebase functions:config:set \
+  line.channel_secret="xxx" \
+  line.access_token="xxx"
+```
