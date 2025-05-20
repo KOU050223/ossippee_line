@@ -273,7 +273,7 @@ async function handleEvent(event: WebhookEvent, lineClient: Client): Promise<any
     }, { merge: true });
     return lineClient.replyMessage(messageEvent.replyToken, {
       type: "text",
-      text: `${choice.react}\n獲得: ${choice.point}ポイント（累計: ${newTotal}ポイント）\n\n店長:「では今日はこの辺でお開きにしましょう！」\n\nあなた：「やっと帰れる...」\n\n（アプリに戻り次のフェーズへ進んでください）`
+      text: `${choice.react}\n${getPointComment(choice.point)}\n\n店長:「では今日はこの辺でお開きにしましょう！」\n\nあなた：「やっと帰れる...」\n\n（アプリに戻り次のフェーズへ進んでください）`
     });
   }
 
@@ -296,7 +296,7 @@ async function handleEvent(event: WebhookEvent, lineClient: Client): Promise<any
   return lineClient.replyMessage(messageEvent.replyToken, [
     {
       type: "text",
-      text: `${choice.react}\n獲得: ${choice.point}ポイント（累計: ${newTotal}ポイント）`
+      text: `${choice.react}\n${getPointComment(choice.point)}`
     },
     makeButtonsTemplate(nextScenario)
   ]);
@@ -316,5 +316,18 @@ function makeButtonsTemplate(scenario: ScenarioPhase) {
         text: `${idx+1}`
       }))
     }
+  }
+}
+
+function getPointComment(point: number): string {
+  switch (point) {
+    case 1:
+      return "【グッド飲みニケーション】";
+    case 2:
+      return "【ノーマル飲みニケーション】";
+    case 3:
+      return "【バッド飲みニケーション】";
+    default:
+      return "";
   }
 }
