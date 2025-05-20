@@ -174,7 +174,7 @@ const SCENARIO: ScenarioType = {
 
 interface UserData {
   userId: string;
-  gameState: "entry" | "playing" | "finished" | string; // 全体状態
+  gameState: string; // 全体状態
   talkState: PhaseType;    // シナリオ進行
   totalPoints: number;
   history: HistoryItem[];
@@ -188,97 +188,137 @@ interface HistoryItem {
 
 async function handleEvent(event: WebhookEvent, lineClient: Client): Promise<any> {
   const userId = event.source.userId;
+  if (!userId) return;
 
-  if (!userId) {
-    logger.error("userId is undefined");
-    return;
-  }
-
-  // 新規フォロー時の登録
+  // 新規フォロー時
   if (event.type === "follow") {
     const followEvent = event as FollowEvent;
     await db.collection("users").doc(userId).set({
       userId,
-      gameState: "playing",     // ゲーム全体の状態
-      talkState: "phase1",      // シナリオ進行
+      gameState: "entry",
+      talkState: "phase1",
       totalPoints: 0,
       history: []
     }, { merge: true });
-
-    return lineClient.replyMessage(followEvent.replyToken, {
-      type: "text",
-      text: "酒飲み部のグループに参加ありがとう！ゲームを始めます！\n\n" + (SCENARIO["phase1"]?.msg || "ようこそ！選択肢を選んでください。")
-    });
+    const nextScenario = "phase1";
+    const nextScenarioPhase = SCENARIO[nextScenario];
+    if (!nextScenarioPhase) {
+      return lineClient.replyMessage(followEvent.replyToken, {
+        type: "text",
+        text: "シナリオが見つかりません。"
+      });
+    }
+    return lineClient.replyMessage(followEvent.replyToken, [
+      {
+        type: "text",
+        text: "酒飲み部のグループに参加ありがとう！\n\n"
+      },
+      makeButtonsTemplate(nextScenarioPhase)
+    ]);
   }
-
   if (event.type !== "message" || event.message.type !== "text") return;
-
   const messageEvent = event as MessageEvent;
-
-  // Firestoreから状態取得
   const doc = await db.collection("users").doc(userId).get();
   if (!doc.exists) {
-    // フォローしてないユーザー（エラー処理）
     return lineClient.replyMessage(messageEvent.replyToken, { type: "text", text: "まずは友だち追加してください！" });
   }
   const userData = doc.data() as UserData;
-
-  // ゲーム終了状態なら案内
-  if (userData.gameState === "finished" || userData.talkState === "end") {
+  if (userData.gameState === "flutter" || userData.talkState === "end") {
     return lineClient.replyMessage(messageEvent.replyToken, {
       type: "text",
       text: "もうゲームは終了しています！\nもう一度遊びたい場合は「リセット」と送ってください。"
     });
   }
-
   const phase = userData.talkState || "phase1";
   const scenario = SCENARIO[phase];
   if (!scenario) return lineClient.replyMessage(messageEvent.replyToken, { type: "text", text: "ゲームは終了しました。" });
-
-  // 選択肢の番号をテキストから抽出
   const textMessage = messageEvent.message as TextEventMessage;
   const choiceIndex = ["1", "2", "3"].indexOf(textMessage.text.trim());
   if (choiceIndex === -1) {
-    // 選択肢以外の返答 → 選択肢を再表示
-    return lineClient.replyMessage(messageEvent.replyToken, { type: "text", text: "数字で選択してください！\n" + scenario.msg });
+    // // 選択肢以外 → QuickReply付き再表示
+    // return lineClient.replyMessage(messageEvent.replyToken, {
+    //   type: "text",
+    //   text: "数字で選択してください！\n" + scenario.msg,
+    //   quickReply: makeQuickReply(scenario.choices)
+    // });
+    // ボタンテンプレートで再表示
+    return lineClient.replyMessage(messageEvent.replyToken, makeButtonsTemplate(scenario));
   }
   const choice = scenario.choices[choiceIndex];
   const newTotal = (userData.totalPoints || 0) + choice.point;
-
-  // 履歴保存
   const newHistory: HistoryItem[] = [
     ...(userData.history || []),
     { phase, choice: choice.text, point: choice.point }
   ];
-
-  // 8ポイント到達なら強制お開き
   if (newTotal >= 8) {
     await db.collection("users").doc(userId).set({
       talkState: "end",
-      gameState: "finished",      // ゲーム全体の状態も終了へ
+      gameState: "flutter",
       totalPoints: newTotal,
       history: newHistory
     }, { merge: true });
-
     return lineClient.replyMessage(messageEvent.replyToken, {
       type: "text",
       text: `${choice.react}\n獲得: ${choice.point}ポイント（累計: ${newTotal}ポイント）\n\n店長:「では今日はこの辺でお開きにしましょう！」`
     });
   }
-
-  // 通常進行
   const nextPhase = scenario.next;
   await db.collection("users").doc(userId).set({
-    talkState: nextPhase,          // シナリオ進行
-    gameState: "line",          // ゲーム全体状態も更新（進行中）
+    talkState: nextPhase,
+    gameState: "line",
     totalPoints: newTotal,
     history: newHistory
   }, { merge: true });
+  // const nextMsg = SCENARIO[nextPhase]?.msg || "次のフェーズに進みます";
+  // return lineClient.replyMessage(messageEvent.replyToken, {
+  //   type: "text",
+  //   text: `${choice.react}\n獲得: ${choice.point}ポイント（累計: ${newTotal}ポイント）\n\n${nextMsg}`,
+  //   quickReply: makeQuickReply(SCENARIO[nextPhase]?.choices || [])
+  // });
+    const nextScenario = SCENARIO[nextPhase];
+    if (!nextScenario) {
+      return lineClient.replyMessage(messageEvent.replyToken, {
+        type: "text",
+        text: `${choice.react}\n獲得: ${choice.point}ポイント（累計: ${newTotal}ポイント）\n\n次のフェーズが見つかりません。`
+      });
+    }
+    
+    return lineClient.replyMessage(messageEvent.replyToken, [
+    {
+      type: "text",
+      text: `${choice.react}\n獲得: ${choice.point}ポイント（累計: ${newTotal}ポイント）`
+    },
+    makeButtonsTemplate(nextScenario)
+    ]);
+}
 
-  // 次のフェーズのメッセージ
-  const nextMsg = SCENARIO[nextPhase]?.msg || "次のフェーズに進みます";
-  return lineClient.replyMessage(messageEvent.replyToken, {
-    type: "text",
-    text: `${choice.react}\n獲得: ${choice.point}ポイント（累計: ${newTotal}ポイント）\n\n${nextMsg}`
-  });
+// QuickReply生成
+// function makeQuickReply(choices: { text: string }[]) {
+//   return {
+//     items: choices.map((choice, idx) => ({
+//       type: "action" as const,
+//       action: {
+//         type: "message" as const,
+//         label: `${idx + 1}`,
+//         text: `${idx + 1}`
+//       }
+//     }))
+//   };
+// }
+
+// ボタンテンプレート生成
+function makeButtonsTemplate(scenario: ScenarioPhase) {
+  return {
+    type: "template" as const,
+    altText: "選択肢を選んでください",
+    template: {
+      type: "buttons" as const,
+      text: scenario.msg,
+      actions: scenario.choices.map((choice, idx) => ({
+        type: "message" as const,
+        label: scenario.choices.length === 2 ? ["はい","いいえ"][idx] : `${idx+1}: ${choice.text}`,
+        text: `${idx+1}`
+      }))
+    }
+  }
 }
