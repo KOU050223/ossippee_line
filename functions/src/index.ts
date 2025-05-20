@@ -119,54 +119,54 @@ const SCENARIO: ScenarioType = {
   "phase1": {
     msg: "店長:「みなさん、乾杯！」\nあなた：（飲みすぎて少し落ち着かない…）\n選択肢:\n1. すみません、少し席を外す必要がありまして…\n2. 乾杯ー！（笑顔で軽くグラスだけ掲げる）\n3. あと一杯だけ…おかわりお願いします",
     choices: [
-      { text: "1", point: 3, react: "同僚A:「あれ？大丈夫？」と心配そうに小声で聞き返す。" },
-      { text: "2", point: 1, react: "同僚B:「お、元気だね！」と照れ笑いしつつ拍手。" },
-      { text: "3", point: 2, react: "店員:「かしこまりました」と手早くジョッキを用意しに行く。" },
+      { text: "すみません、少し席を外す必要がありまして…", point: 3, react: "同僚A:「あれ？大丈夫？」と心配そうに小声で聞き返す。" },
+      { text: "乾杯ー！（笑顔で軽くグラスだけ掲げる）", point: 1, react: "同僚B:「お、元気だね！」と照れ笑いしつつ拍手。" },
+      { text: "あと一杯だけ…おかわりお願いします", point: 2, react: "店員:「かしこまりました」と手早くジョッキを用意しに行く。" },
     ],
     next: "phase2-1"
   },
   "phase2-1": {
     msg: "同僚C:「この週末、何か予定ある？」\nあなた：（そろそろ切り上げたい…）\n選択肢:\n1. 実はちょっと急ぎの用事を片付けたくて…そろそろ失礼してもいいですか？\n2. まだ未定だけど…みんなは？\n3. 週末は家でゆっくりしようかな…",
     choices: [
-      { text: "1", point: 3, react: "同僚C:「あ、そうなんだ。じゃあ今日はここまでで！」と快く了承。" },
-      { text: "2", point: 1, react: "同僚D:「そうなんだ！続きは週末に話そう！」と楽しげに話題継続。" },
-      { text: "3", point: 2, react: "同僚E:「それもいいね」と軽く同意。" },
+      { text: "実はちょっと急ぎの用事を片付けたくて…そろそろ失礼してもいいですか？", point: 3, react: "同僚C:「あ、そうなんだ。じゃあ今日はここまでで！」と快く了承。" },
+      { text: "まだ未定だけど…みんなは？", point: 1, react: "同僚D:「そうなんだ！続きは週末に話そう！」と楽しげに話題継続。" },
+      { text: "週末は家でゆっくりしようかな…", point: 2, react: "同僚E:「それもいいね」と軽く同意。" },
     ],
     next: "phase2-2"
   },
   "phase2-2": {
     msg: "同僚F:「最近、休日は何してるの？」\nあなた：（早くお暇を…）\n選択肢:\n1. 趣味を楽しむ時間が取れなくて…今日はこれで失礼します\n2. 新しいゲームを始めてみたよ！\n3. 家で家族と過ごす予定だから…ラストオーダーで締めない？",
     choices: [
-      { text: "1", point: 3, react: "同僚F:「あら、そうなの？じゃあまた今度ね」と気遣いの言葉。" },
-      { text: "2", point: 1, react: "同僚G:「へえ、面白そう！」と話を広げようとする。" },
-      { text: "3", point: 2, react: "店長:「いい提案だね」と盛り上げる。" },
+      { text: "趣味を楽しむ時間が取れなくて…今日はこれで失礼します", point: 3, react: "同僚F:「あら、そうなの？じゃあまた今度ね」と気遣いの言葉。" },
+      { text: "新しいゲームを始めてみたよ！", point: 1, react: "同僚G:「へえ、面白そう！」と話を広げようとする。" },
+      { text: "家で家族と過ごす予定だから…ラストオーダーで締めない？", point: 2, react: "店長:「いい提案だね」と盛り上げる。" },
     ],
     next: "phase2-3"
   },
   "phase2-3": {
     msg: "同僚H:「あの案件、もうすぐ終わりそう？」\nあなた：（これ以上は耐えられない…）\n選択肢:\n1. 実は昨日徹夜で対応してて…今日は失礼します\n2. はい、もう少しで…詳細はまた後日！\n3. まだ山場だけど、どうにかなるよ！",
     choices: [
-      { text: "1", point: 3, react: "同僚H:「マジか！お疲れさま…また報告聞かせて」と同情。" },
-      { text: "2", point: 2, react: "同僚I:「了解！」と簡潔に切り上げムード。" },
-      { text: "3", point: 1, react: "同僚J:「頼もしいね！」と笑顔で話継続。" },
+      { text: "実は昨日徹夜で対応してて…今日は失礼します", point: 3, react: "同僚H:「マジか！お疲れさま…また報告聞かせて」と同情。" },
+      { text: "はい、もう少しで…詳細はまた後日！", point: 2, react: "同僚I:「了解！」と簡潔に切り上げムード。" },
+      { text: "まだ山場だけど、どうにかなるよ！", point: 1, react: "同僚J:「頼もしいね！」と笑顔で話継続。" },
     ],
     next: "phase3"
   },
   "phase3": {
     msg: "ホスト:「二次会、どこか行く人～？」\nあなた：（これ以上は控えたい…）\n選択肢:\n1. ごめんなさい、今日はちょっと控えます…お先に失礼します\n2. ちょっと予定を確認してから決めてもいいですか？\n3. ぜひ参加したいです！",
     choices: [
-      { text: "1", point: 3, react: "ホスト:「あ、そうか…また今度ね」と少し残念そうに手を振る。" },
-      { text: "2", point: 2, react: "同僚K:「うん、急いでないから」と配慮してくれる。" },
-      { text: "3", point: 1, react: "ホスト:「おお、心強い！」と二次会の店探しに意欲を見せる。" },
+      { text: "ごめんなさい、今日はちょっと控えます…お先に失礼します", point: 3, react: "ホスト:「あ、そうか…また今度ね」と少し残念そうに手を振る。" },
+      { text: "ちょっと予定を確認してから決めてもいいですか？", point: 2, react: "同僚K:「うん、急いでないから」と配慮してくれる。" },
+      { text: "ぜひ参加したいです！", point: 1, react: "ホスト:「おお、心強い！」と二次会の店探しに意欲を見せる。" },
     ],
     next: "phase4"
   },
   "phase4": {
     msg: "店員:「ラストオーダーです」\nあなた：（ここで最後の一手を…）\n選択肢:\n1. お会計をお願いします！\n2. 最後にもう一杯だけ…\n3. そろそろ失礼しますね…",
     choices: [
-      { text: "1", point: 3, react: "店員:「かしこまりました」とレジへ案内してくれる。" },
-      { text: "2", point: 1, react: "同僚L:「お、もう一杯？」と期待の視線。" },
-      { text: "3", point: 2, react: "店長:「おっと、そうか。じゃあ今日はここまでだね」と時計を見る。" },
+      { text: "お会計をお願いします！", point: 3, react: "店員:「かしこまりました」とレジへ案内してくれる。" },
+      { text: "最後にもう一杯だけ…", point: 1, react: "同僚L:「お、もう一杯？」と期待の視線。" },
+      { text: "そろそろ失礼しますね…", point: 2, react: "店長:「おっと、そうか。じゃあ今日はここまでだね」と時計を見る。" },
     ],
     next: "end"
   }
@@ -190,9 +190,27 @@ async function handleEvent(event: WebhookEvent, lineClient: Client): Promise<any
   const userId = event.source.userId;
   if (!userId) return;
 
-  // 新規フォロー時
+  // 新規フォロー時はゲーム開始案内だけ
   if (event.type === "follow") {
-    const followEvent = event as FollowEvent;
+    return lineClient.replyMessage((event as FollowEvent).replyToken, {
+      type: "text",
+      text: "「帰りたいなぁ〜」と送るとゲームが始まります！"
+    });
+  }
+
+  // メッセージ以外は無視
+  if (event.type !== "message" || event.message.type !== "text") return;
+
+  const messageEvent = event as MessageEvent;
+  const textMessage = messageEvent.message as TextEventMessage;
+  const inputText = textMessage.text.trim();
+
+  // Firestoreから状態取得（なければ新規）
+  let doc = await db.collection("users").doc(userId).get();
+  let userData = doc.exists ? (doc.data() as UserData) : undefined;
+
+  // 「帰りたいなぁ〜」でゲーム開始/リセット
+  if (inputText === "帰りたいなぁ〜") {
     await db.collection("users").doc(userId).set({
       userId,
       gameState: "entry",
@@ -200,47 +218,41 @@ async function handleEvent(event: WebhookEvent, lineClient: Client): Promise<any
       totalPoints: 0,
       history: []
     }, { merge: true });
-    const nextScenario = "phase1";
-    const nextScenarioPhase = SCENARIO[nextScenario];
-    if (!nextScenarioPhase) {
-      return lineClient.replyMessage(followEvent.replyToken, {
-        type: "text",
-        text: "シナリオが見つかりません。"
-      });
-    }
-    return lineClient.replyMessage(followEvent.replyToken, [
+
+    const firstPhase = SCENARIO["phase1"]!;
+    return lineClient.replyMessage(messageEvent.replyToken, [
       {
         type: "text",
-        text: "酒飲み部のグループに参加ありがとう！\n\n"
+        text: "飲み会脱出ゲーム開始！\n\n"
       },
-      makeButtonsTemplate(nextScenarioPhase)
+      makeButtonsTemplate(firstPhase)
     ]);
   }
-  if (event.type !== "message" || event.message.type !== "text") return;
-  const messageEvent = event as MessageEvent;
-  const doc = await db.collection("users").doc(userId).get();
-  if (!doc.exists) {
-    return lineClient.replyMessage(messageEvent.replyToken, { type: "text", text: "まずは友だち追加してください！" });
+
+  // Firestore未登録なら開始ワードを促す
+  if (!userData) {
+    return lineClient.replyMessage(messageEvent.replyToken, {
+      type: "text",
+      text: "「帰りたいなぁ〜」と送るとゲームが始まります！"
+    });
   }
-  const userData = doc.data() as UserData;
+
+  // 終了済みの場合も案内
   if (userData.gameState === "flutter" || userData.talkState === "end") {
     return lineClient.replyMessage(messageEvent.replyToken, {
       type: "text",
-      text: "もうゲームは終了しています！\nもう一度遊びたい場合は「リセット」と送ってください。"
+      text: "もうゲームは終了しています！\nもう一度遊びたい場合は「帰りたいなぁ〜」と送ってください。"
     });
   }
+
+  // シナリオ進行
   const phase = userData.talkState || "phase1";
   const scenario = SCENARIO[phase];
   if (!scenario) return lineClient.replyMessage(messageEvent.replyToken, { type: "text", text: "ゲームは終了しました。" });
-  const textMessage = messageEvent.message as TextEventMessage;
-  const choiceIndex = ["1", "2", "3"].indexOf(textMessage.text.trim());
+
+  // 選択肢（1,2,3で判定）
+  const choiceIndex = ["1", "2", "3"].indexOf(inputText);
   if (choiceIndex === -1) {
-    // // 選択肢以外 → QuickReply付き再表示
-    // return lineClient.replyMessage(messageEvent.replyToken, {
-    //   type: "text",
-    //   text: "数字で選択してください！\n" + scenario.msg,
-    //   quickReply: makeQuickReply(scenario.choices)
-    // });
     // ボタンテンプレートで再表示
     return lineClient.replyMessage(messageEvent.replyToken, makeButtonsTemplate(scenario));
   }
@@ -250,6 +262,8 @@ async function handleEvent(event: WebhookEvent, lineClient: Client): Promise<any
     ...(userData.history || []),
     { phase, choice: choice.text, point: choice.point }
   ];
+
+  // 8ポイント到達で終了
   if (newTotal >= 8) {
     await db.collection("users").doc(userId).set({
       talkState: "end",
@@ -259,9 +273,11 @@ async function handleEvent(event: WebhookEvent, lineClient: Client): Promise<any
     }, { merge: true });
     return lineClient.replyMessage(messageEvent.replyToken, {
       type: "text",
-      text: `${choice.react}\n獲得: ${choice.point}ポイント（累計: ${newTotal}ポイント）\n\n店長:「では今日はこの辺でお開きにしましょう！」`
+      text: `${choice.react}\n獲得: ${choice.point}ポイント（累計: ${newTotal}ポイント）\n\n店長:「では今日はこの辺でお開きにしましょう！」\n\nあなた：「やっと帰れる...」\n\n（アプリに戻り次のフェーズへ進んでください）`
     });
   }
+
+  // 次フェーズへ
   const nextPhase = scenario.next;
   await db.collection("users").doc(userId).set({
     talkState: nextPhase,
@@ -269,42 +285,22 @@ async function handleEvent(event: WebhookEvent, lineClient: Client): Promise<any
     totalPoints: newTotal,
     history: newHistory
   }, { merge: true });
-  // const nextMsg = SCENARIO[nextPhase]?.msg || "次のフェーズに進みます";
-  // return lineClient.replyMessage(messageEvent.replyToken, {
-  //   type: "text",
-  //   text: `${choice.react}\n獲得: ${choice.point}ポイント（累計: ${newTotal}ポイント）\n\n${nextMsg}`,
-  //   quickReply: makeQuickReply(SCENARIO[nextPhase]?.choices || [])
-  // });
-    const nextScenario = SCENARIO[nextPhase];
-    if (!nextScenario) {
-      return lineClient.replyMessage(messageEvent.replyToken, {
-        type: "text",
-        text: `${choice.react}\n獲得: ${choice.point}ポイント（累計: ${newTotal}ポイント）\n\n次のフェーズが見つかりません。`
-      });
-    }
-    
-    return lineClient.replyMessage(messageEvent.replyToken, [
+  const nextScenario = SCENARIO[nextPhase];
+  if (!nextScenario) {
+    return lineClient.replyMessage(messageEvent.replyToken, {
+      type: "text",
+      text: `${choice.react}\n獲得: ${choice.point}ポイント（累計: ${newTotal}ポイント）\n\n次のフェーズが見つかりません。`
+    });
+  }
+  // 反応+次フェーズのボタン
+  return lineClient.replyMessage(messageEvent.replyToken, [
     {
       type: "text",
       text: `${choice.react}\n獲得: ${choice.point}ポイント（累計: ${newTotal}ポイント）`
     },
     makeButtonsTemplate(nextScenario)
-    ]);
+  ]);
 }
-
-// QuickReply生成
-// function makeQuickReply(choices: { text: string }[]) {
-//   return {
-//     items: choices.map((choice, idx) => ({
-//       type: "action" as const,
-//       action: {
-//         type: "message" as const,
-//         label: `${idx + 1}`,
-//         text: `${idx + 1}`
-//       }
-//     }))
-//   };
-// }
 
 // ボタンテンプレート生成
 function makeButtonsTemplate(scenario: ScenarioPhase) {
@@ -316,7 +312,7 @@ function makeButtonsTemplate(scenario: ScenarioPhase) {
       text: scenario.msg,
       actions: scenario.choices.map((choice, idx) => ({
         type: "message" as const,
-        label: scenario.choices.length === 2 ? ["はい","いいえ"][idx] : `${idx+1}: ${choice.text}`,
+        label: `${idx+1}`,
         text: `${idx+1}`
       }))
     }
