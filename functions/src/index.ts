@@ -5,7 +5,6 @@ import * as admin from "firebase-admin";
 import express from "express";
 import { middleware as lineMiddleware, Client } from "@line/bot-sdk";
 import { WebhookEvent, MessageEvent, FollowEvent, TextEventMessage } from "@line/bot-sdk";
-import { user } from "firebase-functions/v1/auth";
 
 // Admin SDK 初期化
 admin.initializeApp();
