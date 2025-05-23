@@ -5,6 +5,7 @@ import * as admin from "firebase-admin";
 import express from "express";
 import { middleware as lineMiddleware, Client } from "@line/bot-sdk";
 import { WebhookEvent, MessageEvent, FollowEvent, TextEventMessage } from "@line/bot-sdk";
+import { user } from "firebase-functions/v1/auth";
 
 // Admin SDK 初期化
 admin.initializeApp();
@@ -189,12 +190,13 @@ interface HistoryItem {
 async function handleEvent(event: WebhookEvent, lineClient: Client): Promise<any> {
   const userId = event.source.userId;
   if (!userId) return;
+  const profile = await lineClient.getProfile(userId);
 
   // 新規フォロー時はゲーム開始案内だけ
   if (event.type === "follow") {
     return lineClient.replyMessage((event as FollowEvent).replyToken, {
       type: "text",
-      text: "「帰りたいなぁ〜」と送るとゲームが始まります！"
+      text: `${profile.displayName} 酒飲み部のグループに参加ありがと〜！\n${profile.displayName} さんのidは ${profile.userId} \nだから今回使うアプリに登録しといてよ`
     });
   }
 
@@ -233,7 +235,7 @@ async function handleEvent(event: WebhookEvent, lineClient: Client): Promise<any
   if (!userData) {
     return lineClient.replyMessage(messageEvent.replyToken, {
       type: "text",
-      text: "「帰りたいなぁ〜」と送るとゲームが始まります！"
+      text: `${userId}`
     });
   }
 
