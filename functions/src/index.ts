@@ -189,10 +189,18 @@ interface HistoryItem {
 async function handleEvent(event: WebhookEvent, lineClient: Client): Promise<any> {
   const userId = event.source.userId;
   if (!userId) return;
-  const profile = await lineClient.getProfile(userId);
+  const profile = await lineClient.getProfile(userId as string);
 
   // 新規フォロー時はゲーム開始案内だけ
   if (event.type === "follow") {
+    // Firestore に登録
+    await db.collection('users').doc(profile.userId).set({
+      userId: profile.userId,
+      displayName: profile.displayName,
+      pictureUrl: profile.pictureUrl,
+      gameState: 'entry',
+      nomiPoint: 0,
+    }, { merge: true });
     return lineClient.replyMessage((event as FollowEvent).replyToken, {
       type: "text",
       text: `${profile.displayName} 酒飲み部のグループに参加ありがと〜！\n${profile.displayName} さんのidは ${profile.userId} \nだから今回使うアプリに登録しといてよ`
