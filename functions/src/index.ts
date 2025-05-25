@@ -199,6 +199,9 @@ async function handleEvent(event: WebhookEvent, lineClient: Client): Promise<any
       displayName: profile.displayName,
       pictureUrl: profile.pictureUrl,
       gameState: 'entry',
+      talkState: 'phase1',
+      totalPoints: 0,
+      history: [], 
       nomiPoint: 0,
     }, { merge: true });
     return lineClient.replyMessage((event as FollowEvent).replyToken, {
@@ -232,7 +235,7 @@ async function handleEvent(event: WebhookEvent, lineClient: Client): Promise<any
     return lineClient.replyMessage(messageEvent.replyToken, [
       {
         type: "text",
-        text: "飲み会脱出ゲーム開始！\n\n"
+        text: "飲み会をいい具合に終わらせて、早くトイレに行かないと...\n\n(飲み会を盛り下げる発言をすると盛り下げポイントが貯まっていきます)"
       },
       makeButtonsTemplate(firstPhase)
     ]);
